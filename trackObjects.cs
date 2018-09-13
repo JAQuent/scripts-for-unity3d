@@ -3,7 +3,8 @@
 // E-mail: Alex.Quent at mrc-cbu.cam.ac.uk
 // Licence: GNU General Public License v2.0
 // Version history:
-// 					1.0 - 2018/09/12 - first Version 
+// 					1.0 - 2018/09/12 - first Version.
+// 					1.1 - 2018/09/13 - Actually saving milliseconds and not float values in seconds.
 //
 // How to use:
 // 1. Attach script a game object.
@@ -81,7 +82,7 @@ public class trackObjects : MonoBehaviour {
 				trackFile.WriteLine("" + 
 						  trackedObj[i] + "\t" +
 						  i + "\t" + 
-						  Time.time + "\t" +
+						  Time.time * 1000 + "\t" +
 						  trackedObj[i].transform.position.x + "\t" + 
 						  trackedObj[i].transform.position.y + "\t" +
 						  trackedObj[i].transform.position.z + "\t" +
