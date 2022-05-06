@@ -13,35 +13,37 @@ library(plyr)
 
 For the type of memory experiments using virtual reality (VR) that I ran
 during my PhD I would have loved to use eye tracking to ascertain that
-the object that my participants encountered during these tasks were
+the objects that my participants encountered during these tasks were
 actually seen. Unfortunately, I did not have access to a head mounted
 display that also allows eye tracking at the same time. So I thought
 about the second best thing because I knew there must be something. One
 important functionality that games engines like unity usually offer is
-to cast rays from certain point into certain direction to detect whether
-this rays hits anything. This is typically invisible to the player but
-is crucial for a lot of different functions (e.g. Did the player hit the
-enemy when they shot at them?). This functionality also offers a way to
-record what object appear where on a screen at which time. Figure 1
-illustrates the basic idea.
+to cast rays from certain point into a certain direction to detect
+whether this ray hits anything. This is typically invisible to the
+player but is crucial for a lot of different functions (e.g. Did the
+player hit the enemy when they shot at them?). For me,, this
+functionality also offers a way to record what object appeared where on
+a screen at which time. Figure 1 illustrates the basic idea fo the
+script that is described here.
 
 ![Figure 1: Illustration of the basic idea of the screen ray
 tracker.](images/illustration.png) Figure 1: Illustration of the basic
-idea of the screen ray tracker.
+idea of the screen ray tracker. Note only a subset of the rays is shown
+here.
 
-Shortly put, on every frame *screen ray tracker* casts rays from the
-camera parallel to the screen project and detects whether or not objects
-on so-called [layer
-masks](https://docs.unity3d.com/ScriptReference/LayerMask.html). If an
-object is hit, the ray index, the ray position as well as the name of
-the game object that has been hit is saved with a time-stamp. This
-tracker is implement in
+Shortly put, on every frame the *screen ray tracker* casts rays from the
+camera parallel to the screen projection and detects whether or not
+objects on so-called [layer
+masks](https://docs.unity3d.com/ScriptReference/LayerMask.html) are hit
+by the rays. If an object is hit, the ray index, the ray position as
+well as the name of the game object that has been hit is saved with a
+time-stamp. This tracker is implemented in
 [UXF’s](https://github.com/immersivecognition/unity-experiment-framework)
 tracking system (see
 [here](https://github.com/immersivecognition/unity-experiment-framework/wiki/Tracker-system)).
-The user of this tool as full control where on the screen the rays will
-project to by providing x,y coordinates form 0 to 1 in .json file for
-the UXF experiment. To cut to the chase, what is this useful for?
+The user of this tool has full control where on the screen the rays will
+project to by providing x,y coordinates form 0 to 1 in the .json file
+for the UXF experiment. Now to the question, what is this useful for?
 
 ![Figure 2: Screenshots of the *screen ray tracker* with enabled debug
 mode in Unity’s scene view. The rays in red do not hit any object and
@@ -49,35 +51,35 @@ they are also not logged. Rays that hit an object in that scene are
 green. In this example the floor & the walls are not part of the layer
 mask, which is why they are ignored.](images/screenshots.png)
 
-Figure 2: Screenshots of the *screen ray tracker* with enabled debug
-mode in Unity’s scene view. The rays in red do not hit any object and
+Figure 2: Screenshots of the *screen ray tracker* with the debug mode
+enabled in Unity’s scene view. The rays in red do not hit any object so
 they are also not logged. Rays that hit an object in that scene are
 green. In this example the floor & the walls are not part of the layer
-mask, which is why they are ignored.
+mask, which is why they are ignored in this process.
 
 # What is possible?
 
 There are number of possible applications of this tool. I list only a
 few of them. 1. Find the first time point an object appears on the
 screen. 2. Find out whether an game object ever appeared centrally on
-the screen? 3. If so how long? 4. Which object stay on the screen for
+the screen. 3. If so how long? 4. Which object stay on the screen for
 the longest duration?
 
 More specific combinations of these questions can be answered with the
-data that is collected. In envision use-case, I would be able to verify
-whether an object was at any given time point visible to the
-participant. In naturalistic settings where the participants for
-instance explores and environment on their own this not ensured.
-However, it can be crucial if I want to explain why an object was
-remembered well or possible forgotten. The latter would be simply
-impossible to say if I don’t know if the object was ever visible to the
-participant.
+data that is collected. In my envisioned use-case, I would be able to
+verify whether an object was at any time point during the experiment
+visible to the participant. In naturalistic settings where the
+participants for instance explores an environment on their own this is
+not a given. However, it can be crucial if I want to explain why an
+object was remembered well or possibly even forgotten. The latter would
+be simply impossible to judge if I don’t know if the object was ever
+visible to the participant.
 
 # Investigating example data
 
-To give an example, I quickly analyse pilot data from a quick experiment
-that I started where participant have to collect diamond-shaped object
-to get reward (depicted in Figure 2).
+To give an example, I quickly analyse pilot data from an experiment that
+I started where participant have to collect diamond-shaped objects to
+get reward (depicted in Figure 2).
 
 ``` r
 # Load the data
@@ -101,7 +103,7 @@ Quick explanation of the columns:
 -   ***rayIndex***: The ray index starting form 0 to how many rays were
     provided in the .json file - 1.
 -   ***x***: The horizontal position on the screen (between 0 and 1).
--   ***y***: The certival position on the screen (between 0 and 1).
+-   ***y***: The vertical position on the screen (between 0 and 1).
 -   ***objectDetected***: The name of the object as it appeared in the
     game view. It might therefore be important to give unique names to
     the objects.
@@ -133,7 +135,7 @@ object was collected, other parts of the screen like the corners were
 filled with the object.
 
 Another thing I can visualise is how many time points (not time
-duration) each object was on the screen and plot that distrubution.
+duration) each object was on the screen and plot that distribution.
 
 ``` r
 # For each object get each time point it was somewhere on the screen
@@ -156,17 +158,17 @@ ggplot(timeOnScreen, aes(x = timePoints, y = objectDetected)) +
 
 ![](README_files/figure-gfm/screen_tracker_earliest_time_point-1.png)<!-- -->
 
-Based on this distribution we learn that Icosahedron 9 is the object was
-on the screen the highest number of time points. A more specific
-question for naturalistic experiments could be more targeted and ask
-when is the first time this object appeared on the screen?
+Based on this distribution we learn that Icosahedron 9 is the object
+that was on the screen for the highest number of time points. A more
+specific question for naturalistic experiments could be more targeted
+and ask when is the first time this object appeared on the screen?
 
 ``` r
 # Find the first time icosahedron9 was on the screen.
 firstTime <- round(min(screenTracker$time[screenTracker$objectDetected == 'icosahedron9']))
 ```
 
-In this case, the answer is that Icosahedron 9 first appeared on the
+In this case, the answer is that Icosahedron 9, it first appeared on the
 screen on second 30. These are obviously only examples and many more
 things can be assessed with this data.
 
@@ -174,7 +176,7 @@ things can be assessed with this data.
 
 Now, to the more technical bit on how to use this script with Unity (I
 currently use Unity 2021.3.1f1c1) and UXF (version 2.4.3). Instructions
-from the script itself:
+are from the script itself:
 
 > Attach this component to any game object (e.g. an empty one) and
 > assign it to the correct field. It is called Tracked Objects. You can
@@ -206,8 +208,8 @@ from the script itself:
 }
 ```
 
-> if you only want one ray in the middle. The only important thing is
-> that you have to provide input in form of *ray_x* and *ray_y*. Then
+> if you only want one ray in the middle. The only important thing here
+> is that you have to provide input in form of *ray_x* and *ray_y*. Then
 > you’re good to go.
 
 > *Optional Input* include the ability to activate *Debug mode*, which
