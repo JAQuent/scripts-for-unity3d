@@ -84,3 +84,14 @@ bool isRotated(Quaternion currentRot, Quaternion targetRot){
 
 	return isThere;
 }
+
+
+/// <summary>
+/// This function takes a string and splits it into list based on character
+/// </summary>
+List<string> splitString2list(string string2split, string splitCharacter){
+	// Needs using System.Linq;
+	List<string> list = new List<string>();
+    list = string2split.Split(splitCharacter).ToList();
+    return list;
+}
