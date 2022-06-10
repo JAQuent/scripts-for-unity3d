@@ -8,6 +8,7 @@ This repository contains various C# scripts written for VR experiments in unity3
 * **_LookAtPlayer.cs_** is a script that makes a game object look at the player the whole time. 
 * **_screenRayTracker_** An experimental script that allows you to track what's on the screen in Unity. Check this folder for more details. 
 * **_Load a JSON file_** An example how to load in a .json file into Unity3D. Check out this post to an explanation: https://jaquent.github.io/post/how-you-can-easily-load-data-into-unity3d-using-a-json-file/
+* **_ThreeButtonMovement.cs_** is script that allows to move a player character with only three buttons. The set-up is optimised to be used in an MRI scanner & grid-like activity studies because a static variable let's you access whether the player is currently moving forward (more details in the script itself). 
 
 # Disclaimer: 
 Except when otherwise stated in writing the copyright holders and/or other parties provide the programs 'as is' without warranty of any kind, expressed or implied, including, but not limited to, the implied warranties of merchantability and fitness for a particular purpose.
